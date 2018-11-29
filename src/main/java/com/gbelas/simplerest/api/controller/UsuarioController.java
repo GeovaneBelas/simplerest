@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gbelas.simplerest.api.enums.Operation;
@@ -153,13 +156,20 @@ public class UsuarioController {
 		}
 	}
 
-	@GetMapping(value = "{page}/{count}")
+	@GetMapping(value = "paginacao"/*, params = { "p", "l", "d", "n", "s" }*/)
 	@PreAuthorize("hasAnyRole('ADM')")
-	public ResponseEntity<Response<Page<Usuario>>> findAll(@PathVariable int page, @PathVariable int count) {
+	public ResponseEntity<Response<Page<Usuario>>> findAll(HttpServletRequest request
+			/*@RequestParam("p") int page, @RequestParam("l") int limit,
+			@RequestParam("d") Direction direction, @RequestParam("n") String name, @RequestParam("s") String search*/) {
 		Response<Page<Usuario>> response = new Response<Page<Usuario>>();
+		
+		int page=(request.getParameter("p")==null?0:Integer.parseInt(request.getParameter("p")));
+		int limit=(request.getParameter("l")==null?10:Integer.parseInt(request.getParameter("l")));
+		Direction direction=(request.getParameter("d")==null?null:Direction.valueOf(request.getParameter("d")));
+		String name=request.getParameter("n");
+		String search=request.getParameter("s");
 
-		Page<Usuario> uPage = usuarioService.findAll(page, count);
-		response.setData(uPage);
+		response.setData(usuarioService.findAll(search, page, limit, direction, name));
 
 		return ResponseEntity.ok(response);
 	}
