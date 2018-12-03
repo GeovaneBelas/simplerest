@@ -1,6 +1,7 @@
 package com.gbelas.simplerest.api.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,7 +35,11 @@ public class Usuario implements Serializable {
 
 	@Column(name = "ind_ativo")
 	private Boolean indAtivo;
-
+	
+	@Column(name = "dt_nasc")
+	@Temporal(TemporalType.DATE)
+	private Date dtNasc;
+	
 	public Usuario() {
 	}
 
@@ -78,4 +83,11 @@ public class Usuario implements Serializable {
 		this.senha = senha;
 	}
 
+	public Date getDtNasc() {
+		return dtNasc;
+	}
+
+	public void setDtNasc(Date dtNasc) {
+		this.dtNasc = dtNasc;
+	}
 }

@@ -2,6 +2,7 @@ package com.gbelas.simplerest.api.service.impl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,13 +83,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 						if (f.isAnnotationPresent(Column.class) || f.isAnnotationPresent(Id.class)) {
 							if (f.getType().isAssignableFrom(String.class)) {
 								p.add(cb.like(cb.upper(r.get(f.getName())), "%" + search.toUpperCase() + "%"));
-								pCount.add(
-										cb.like(cb.upper(rCount.get(f.getName())), "%" + search.toUpperCase() + "%"));
+								pCount.add(cb.like(cb.upper(rCount.get(f.getName())), "%" + search.toUpperCase() + "%"));
+							} else if (f.getType().isAssignableFrom(Date.class)) {
+								p.add(cb.like(cb.concat(r.get(f.getName()), ""),"%" + search.replace("/", "-") + "%"));
+								pCount.add(cb.like(cb.concat(rCount.get(f.getName()), ""),"%" + search.replace("/", "-") + "%"));
 							} else {
-								p.add(cb.like(cb.upper(cb.concat(r.get(f.getName()), "")),
-										"%" + search.toUpperCase() + "%"));
-								pCount.add(cb.like(cb.upper(cb.concat(rCount.get(f.getName()), "")),
-										"%" + search.toUpperCase() + "%"));
+								p.add(cb.like(cb.upper(cb.concat(r.get(f.getName()), "")),"%" + search.toUpperCase() + "%"));
+								pCount.add(cb.like(cb.upper(cb.concat(rCount.get(f.getName()), "")),"%" + search.toUpperCase() + "%"));
 							}
 						}
 					}

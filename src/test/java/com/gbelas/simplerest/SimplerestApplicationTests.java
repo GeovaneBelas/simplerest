@@ -2,6 +2,8 @@ package com.gbelas.simplerest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +41,7 @@ public class SimplerestApplicationTests {
 		user.setSenha(passwordEncoder.encode("123456"));
 		user.setTipoPerfil(TipoPerfil.RES);
 		user.setIndAtivo(true);
+		user.setDtNasc(new Date());
 
 		repository.save(user);
 

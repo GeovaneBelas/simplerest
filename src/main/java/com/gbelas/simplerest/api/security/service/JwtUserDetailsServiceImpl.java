@@ -22,6 +22,8 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 		Usuario u = usuarioService.findByLogin(login);
 		if (u == null) {
 			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", login));
+		}else if (!u.getIndAtivo()) {
+				throw new UsernameNotFoundException(String.format("User '%s' not have access to aplicattion.", login));
 		} else {
 			return JwtUserFactory.create(u);
 		}
